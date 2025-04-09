@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import Step1 from "./Step1";
+import Step2 from "./Step2";
+import Step3 from "./Step3";
 
 // Define validation schema with Zod (unchanged)
 const schema = z
@@ -37,7 +40,8 @@ const MultiStepForm = () => {
     handleSubmit,
     formState: { errors },
     trigger,
-    getValues, // Add getValues to access form data
+    reset,
+    getValues,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -62,11 +66,12 @@ const MultiStepForm = () => {
       3: ["username", "password", "confirmPassword"],
     };
 
+    // Only validate and increment step if we're on steps 1-3
     if (step <= 3) {
       const isValid = await trigger(fieldsToValidate[step]);
-      if (isValid && step < 4) setStep(step + 1);
-    } else if (step < 4) {
-      setStep(step + 1);
+      if (isValid) {
+        setStep(step + 1); // Move to the next step (up to step 4)
+      }
     }
   };
 
@@ -77,7 +82,6 @@ const MultiStepForm = () => {
   // Form submission
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
-    // Add your submission logic here
   };
 
   // Summary component
@@ -117,171 +121,15 @@ const MultiStepForm = () => {
   const steps = [
     {
       title: "Personal Information",
-      content: (
-        <div className="space-y-4">
-          {/* ... Previous Personal Information content unchanged ... */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              {...register("fullName")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.fullName ? "border-red-500" : ""
-              }`}
-            />
-            {errors.fullName && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.fullName.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              {...register("email")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.email ? "border-red-500" : ""
-              }`}
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Phone Number
-            </label>
-            <input
-              {...register("phoneNumber")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.phoneNumber ? "border-red-500" : ""
-              }`}
-            />
-            {errors.phoneNumber && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.phoneNumber.message}
-              </p>
-            )}
-          </div>
-        </div>
-      ),
+      content: <Step1 register={register} errors={errors} />,
     },
     {
       title: "Address Details",
-      content: (
-        <div className="space-y-4">
-          {/* ... Previous Address Details content unchanged ... */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Street Address
-            </label>
-            <input
-              {...register("streetAddress")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.streetAddress ? "border-red-500" : ""
-              }`}
-            />
-            {errors.streetAddress && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.streetAddress.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              City
-            </label>
-            <input
-              {...register("city")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.city ? "border-red-500" : ""
-              }`}
-            />
-            {errors.city && (
-              <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Zip Code
-            </label>
-            <input
-              {...register("zipCode")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.zipCode ? "border-red-500" : ""
-              }`}
-            />
-            {errors.zipCode && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.zipCode.message}
-              </p>
-            )}
-          </div>
-        </div>
-      ),
+      content: <Step2 register={register} errors={errors} />,
     },
     {
       title: "Account Setup",
-      content: (
-        <div className="space-y-4">
-          {/* ... Previous Account Setup content unchanged ... */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Username
-            </label>
-            <input
-              {...register("username")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.username ? "border-red-500" : ""
-              }`}
-            />
-            {errors.username && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.username.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              {...register("password")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.password ? "border-red-500" : ""
-              }`}
-            />
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              {...register("confirmPassword")}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.confirmPassword ? "border-red-500" : ""
-              }`}
-            />
-            {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-        </div>
-      ),
+      content: <Step3 register={register} errors={errors} />,
     },
     {
       title: "Review & Submit",
