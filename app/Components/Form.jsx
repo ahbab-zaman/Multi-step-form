@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Step1 from "./Step1";
@@ -137,6 +138,11 @@ const MultiStepForm = () => {
     },
   ];
 
+  const stepVariants = {
+    initial: { opacity: 0, scale: 0.9 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.9 },
+  };
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       {/* Progress indicator */}
@@ -158,7 +164,16 @@ const MultiStepForm = () => {
       {/* Form content */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-xl font-bold mb-4">{steps[step - 1].title}</h2>
-        {steps[step - 1].content}
+        <motion.div
+          key={step} // Key ensures animation triggers on step change
+          variants={stepVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          {steps[step - 1].content}
+        </motion.div>
 
         {/* Navigation buttons */}
         <div className="mt-6 flex justify-between">
@@ -166,10 +181,10 @@ const MultiStepForm = () => {
             type="button"
             onClick={prevStep}
             disabled={step === 1}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-md transition-transform duration-200 ease-in-out transform ${
               step === 1
                 ? "bg-gray-300 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95"
             }`}
           >
             Previous
@@ -186,7 +201,7 @@ const MultiStepForm = () => {
             <button
               type="button"
               onClick={nextStep}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-transform duration-200 ease-in-out transform active:scale-95"
             >
               Next
             </button>
