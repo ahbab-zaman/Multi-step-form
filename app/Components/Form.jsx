@@ -2,6 +2,32 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+// Define validation schema with Zod
+const schema = z
+  .object({
+    fullName: z.string().min(1, "Full Name is required"),
+    email: z.string().email("Invalid email format").min(1, "Email is required"),
+    phoneNumber: z
+      .string()
+      .min(10, "Phone number must be at least 10 digits")
+      .regex(/^\d+$/, "Phone number must contain only numbers"),
+    streetAddress: z.string().min(1, "Street Address is required"),
+    city: z.string().min(1, "City is required"),
+    zipCode: z
+      .string()
+      .min(5, "Zip Code must be at least 5 digits")
+      .regex(/^\d+$/, "Zip Code must contain only numbers"),
+    username: z.string().min(4, "Username must be at least 4 characters"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
@@ -10,21 +36,33 @@ const MultiStepForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    trigger,
   } = useForm({
+    resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
+      fullName: "",
       email: "",
-      address: "",
+      phoneNumber: "",
+      streetAddress: "",
       city: "",
-      phone: "",
-      message: "",
+      zipCode: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
     },
     mode: "onChange",
   });
 
   // Navigation functions
-  const nextStep = () => {
-    if (step < 3) setStep(step + 1);
+  const nextStep = async () => {
+    const fieldsToValidate = {
+      1: ["fullName", "email", "phoneNumber"],
+      2: ["streetAddress", "city", "zipCode"],
+      3: ["username", "password", "confirmPassword"],
+    };
+
+    const isValid = await trigger(fieldsToValidate[step]);
+    if (isValid && step < 3) setStep(step + 1);
   };
 
   const prevStep = () => {
@@ -45,16 +83,18 @@ const MultiStepForm = () => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Name
+              Full Name
             </label>
             <input
-              {...register("name", { required: "Name is required" })}
+              {...register("fullName")}
               className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.name ? "border-red-500" : ""
+                errors.fullName ? "border-red-500" : ""
               }`}
             />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            {errors.fullName && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.fullName.message}
+              </p>
             )}
           </div>
           <div>
@@ -62,13 +102,7 @@ const MultiStepForm = () => {
               Email
             </label>
             <input
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: "Invalid email address",
-                },
-              })}
+              {...register("email")}
               className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
                 errors.email ? "border-red-500" : ""
               }`}
@@ -76,6 +110,22 @@ const MultiStepForm = () => {
             {errors.email && (
               <p className="mt-1 text-sm text-red-600">
                 {errors.email.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Phone Number
+            </label>
+            <input
+              {...register("phoneNumber")}
+              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+                errors.phoneNumber ? "border-red-500" : ""
+              }`}
+            />
+            {errors.phoneNumber && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.phoneNumber.message}
               </p>
             )}
           </div>
@@ -88,17 +138,17 @@ const MultiStepForm = () => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Address
+              Street Address
             </label>
             <input
-              {...register("address", { required: "Address is required" })}
+              {...register("streetAddress")}
               className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.address ? "border-red-500" : ""
+                errors.streetAddress ? "border-red-500" : ""
               }`}
             />
-            {errors.address && (
+            {errors.streetAddress && (
               <p className="mt-1 text-sm text-red-600">
-                {errors.address.message}
+                {errors.streetAddress.message}
               </p>
             )}
           </div>
@@ -107,7 +157,7 @@ const MultiStepForm = () => {
               City
             </label>
             <input
-              {...register("city", { required: "City is required" })}
+              {...register("city")}
               className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
                 errors.city ? "border-red-500" : ""
               }`}
@@ -116,44 +166,78 @@ const MultiStepForm = () => {
               <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
             )}
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Zip Code
+            </label>
+            <input
+              {...register("zipCode")}
+              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+                errors.zipCode ? "border-red-500" : ""
+              }`}
+            />
+            {errors.zipCode && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.zipCode.message}
+              </p>
+            )}
+          </div>
         </div>
       ),
     },
     {
-      title: "Additional Information",
+      title: "Account Setup",
       content: (
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Phone
+              Username
             </label>
             <input
-              {...register("phone", {
-                required: "Phone is required",
-                pattern: {
-                  value: /^\d{10}$/,
-                  message: "Please enter a valid 10-digit phone number",
-                },
-              })}
+              {...register("username")}
               className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                errors.phone ? "border-red-500" : ""
+                errors.username ? "border-red-500" : ""
               }`}
             />
-            {errors.phone && (
+            {errors.username && (
               <p className="mt-1 text-sm text-red-600">
-                {errors.phone.message}
+                {errors.username.message}
               </p>
             )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Message
+              Password
             </label>
-            <textarea
-              {...register("message")}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              rows="3"
+            <input
+              type="password"
+              {...register("password")}
+              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+                errors.password ? "border-red-500" : ""
+              }`}
             />
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              {...register("confirmPassword")}
+              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+                errors.confirmPassword ? "border-red-500" : ""
+              }`}
+            />
+            {errors.confirmPassword && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
         </div>
       ),
@@ -161,7 +245,7 @@ const MultiStepForm = () => {
   ];
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       {/* Progress indicator */}
       <div className="flex justify-between mb-6">
         {steps.map((_, index) => (
