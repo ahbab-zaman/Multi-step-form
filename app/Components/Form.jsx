@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-// Define validation schema with Zod
+// Define validation schema with Zod (unchanged)
 const schema = z
   .object({
     fullName: z.string().min(1, "Full Name is required"),
@@ -37,6 +37,7 @@ const MultiStepForm = () => {
     handleSubmit,
     formState: { errors },
     trigger,
+    getValues, // Add getValues to access form data
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -61,8 +62,12 @@ const MultiStepForm = () => {
       3: ["username", "password", "confirmPassword"],
     };
 
-    const isValid = await trigger(fieldsToValidate[step]);
-    if (isValid && step < 3) setStep(step + 1);
+    if (step <= 3) {
+      const isValid = await trigger(fieldsToValidate[step]);
+      if (isValid && step < 4) setStep(step + 1);
+    } else if (step < 4) {
+      setStep(step + 1);
+    }
   };
 
   const prevStep = () => {
@@ -75,12 +80,46 @@ const MultiStepForm = () => {
     // Add your submission logic here
   };
 
+  // Summary component
+  const Summary = () => {
+    const values = getValues();
+    return (
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Review Your Information</h3>
+        <div className="space-y-2">
+          <p>
+            <strong>Full Name:</strong> {values.fullName}
+          </p>
+          <p>
+            <strong>Email:</strong> {values.email}
+          </p>
+          <p>
+            <strong>Phone Number:</strong> {values.phoneNumber}
+          </p>
+          <p>
+            <strong>Street Address:</strong> {values.streetAddress}
+          </p>
+          <p>
+            <strong>City:</strong> {values.city}
+          </p>
+          <p>
+            <strong>Zip Code:</strong> {values.zipCode}
+          </p>
+          <p>
+            <strong>Username:</strong> {values.username}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   // Step components array
   const steps = [
     {
       title: "Personal Information",
       content: (
         <div className="space-y-4">
+          {/* ... Previous Personal Information content unchanged ... */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Full Name
@@ -136,6 +175,7 @@ const MultiStepForm = () => {
       title: "Address Details",
       content: (
         <div className="space-y-4">
+          {/* ... Previous Address Details content unchanged ... */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Street Address
@@ -189,6 +229,7 @@ const MultiStepForm = () => {
       title: "Account Setup",
       content: (
         <div className="space-y-4">
+          {/* ... Previous Account Setup content unchanged ... */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Username
@@ -242,6 +283,10 @@ const MultiStepForm = () => {
         </div>
       ),
     },
+    {
+      title: "Review & Submit",
+      content: <Summary />,
+    },
   ];
 
   return (
@@ -282,7 +327,7 @@ const MultiStepForm = () => {
             Previous
           </button>
 
-          {step === 3 ? (
+          {step === 4 ? (
             <button
               type="submit"
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
