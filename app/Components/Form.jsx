@@ -8,6 +8,7 @@ import * as z from "zod";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import { Bounce, toast } from "react-toastify";
 
 // Define validation schema with Zod (unchanged)
 const schema = z
@@ -83,6 +84,21 @@ const MultiStepForm = () => {
   // Form submission
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
+  };
+  const handleSubmitForm = () => {
+    reset();
+    toast("🦄 Wow so easy!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+    setStep(1);
   };
 
   // Summary component
@@ -192,6 +208,7 @@ const MultiStepForm = () => {
 
           {step === 4 ? (
             <button
+              onClick={handleSubmitForm}
               type="submit"
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
             >
