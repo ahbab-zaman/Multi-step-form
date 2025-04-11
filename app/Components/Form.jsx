@@ -161,7 +161,7 @@ const MultiStepForm = () => {
   };
   return (
     <>
-      <div className="h-screen max-w-md mx-auto my-4">
+      <div className="h-screen max-w-md mx-auto my-4 p-6">
         <div className="mb-4 flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold">Validation Form</h2>
@@ -170,7 +170,7 @@ const MultiStepForm = () => {
             <ThemeToggle />
           </div>
         </div>
-        <div className="  p-6 bg-base-100 rounded-lg shadow-xl border-2">
+        <div className="p-6 bg-base-100 rounded-lg shadow-xl border-2">
           {/* Progress indicator */}
           <div className="flex justify-between mb-6">
             {steps.map((_, index) => (
