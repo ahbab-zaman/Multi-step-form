@@ -5,12 +5,12 @@ export default function Step1({register, errors}) {
     <div className="space-y-4">
       {/* ... Previous Personal Information content unchanged ... */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block font-semibold text-gray-700">
           Full Name
         </label>
         <input
           {...register("fullName")}
-          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+          className={`mt-1 block w-full py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
             errors.fullName ? "border-red-500" : ""
           }`}
         />
@@ -19,10 +19,10 @@ export default function Step1({register, errors}) {
         )}
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Email</label>
+        <label className="block font-semibold text-gray-700">Email</label>
         <input
           {...register("email")}
-          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+          className={`mt-1 block w-full py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
             errors.email ? "border-red-500" : ""
           }`}
         />
@@ -31,12 +31,12 @@ export default function Step1({register, errors}) {
         )}
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block font-semibold text-gray-700">
           Phone Number
         </label>
         <input
           {...register("phoneNumber")}
-          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+          className={`mt-1 block w-full py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
             errors.phoneNumber ? "border-red-500" : ""
           }`}
         />

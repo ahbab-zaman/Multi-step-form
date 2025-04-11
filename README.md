@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Multi Step Form Validation
 
-## Getting Started
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Click%20Here-green?style=for-the-badge)](https://form-validation-psi-one.vercel.app)
 
-First, run the development server:
+A responsive and user-friendly **multi-step form validation** web application built with **React**, **Next.js**, **React Hook Form**, and **Zod** for schema validation. This project allows users to submit their credentials step-by-step with real-time form validation and feedback.
+
+## ✨ Features
+
+- Multi-step user input flow
+- Real-time validation with error messages
+- Form validation using `React Hook Form` and `Zod`
+- Smooth transitions with `Framer Motion`
+- Toast notifications for feedback
+- Responsive UI with `Tailwind CSS`
+- Fully accessible form inputs
+
+## 🛠 Installation
+
+Clone the repository and install dependencies:
 
 ```bash
+git clone https://github.com/your-username/multi-step-form-validation.git
+cd multi-step-form-validation
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Dependencies
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```json
+"dependencies": {
+  "React" : "^19.0.0",
+  "Next.js": "15.2.5",
+  "React Hook Form": "^7.55.0",
+  "Zod": "^3.24.2",
+  "Framer Motion": "^12.6.3",
+  "React-Toastify": "^11.0.5",
+  "React Icons": "^5.5.0",
+  "@hookform/resolvers": "^5.0.1",
+}
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+"devDependencies": {
+  "Tailwind CSS": "^4",
+  "ESLint": "^9",
+  "@tailwindcss/postcss": "^4",
+  "@eslint/eslintrc": "^3",
+  "eslint-config-next": "15.2.5",
+}
+```
 
-## Learn More
+## ⚙️ Configuration
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ensure you have the required versions of Node.js and npm installed. Tailwind CSS and ESLint are pre-configured via postcss and eslint-config-next.
