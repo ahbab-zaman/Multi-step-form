@@ -36,6 +36,7 @@ npm run dev
   "Framer Motion": "^12.6.3",
   "React-Toastify": "^11.0.5",
   "React Icons": "^5.5.0",
+  "lucide-react": "^0.487.0",
   "@hookform/resolvers": "^5.0.1",
 }
 

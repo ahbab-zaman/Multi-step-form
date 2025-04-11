@@ -9,7 +9,7 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import { Bounce, toast } from "react-toastify";
-
+import ThemeToggle from "./Theme";
 // Define validation schema with Zod (unchanged)
 const schema = z
   .object({
@@ -160,72 +160,84 @@ const MultiStepForm = () => {
     exit: { opacity: 0, scale: 0.9 },
   };
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      {/* Progress indicator */}
-      <div className="flex justify-between mb-6">
-        {steps.map((_, index) => (
-          <div
-            key={index}
-            className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              step > index
-                ? "bg-indigo-600 text-white"
-                : "bg-gray-200 text-gray-600"
-            }`}
-          >
-            {index + 1}
+    <>
+      <div className="h-screen max-w-md mx-auto my-4">
+        <div className="mb-4 flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-bold">Validation Form</h2>
           </div>
-        ))}
-      </div>
-
-      {/* Form content */}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h2 className="text-xl font-bold mb-4">{steps[step - 1].title}</h2>
-        <motion.div
-          key={step} // Key ensures animation triggers on step change
-          variants={stepVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
-          {steps[step - 1].content}
-        </motion.div>
-
-        {/* Navigation buttons */}
-        <div className="mt-6 flex justify-between">
-          <button
-            type="button"
-            onClick={prevStep}
-            disabled={step === 1}
-            className={`px-4 py-2 rounded-md transition-transform duration-200 ease-in-out transform ${
-              step === 1
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95"
-            }`}
-          >
-            Previous
-          </button>
-
-          {step === 4 ? (
-            <button
-              onClick={handleSubmitForm}
-              type="submit"
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-            >
-              Submit
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={nextStep}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-transform duration-200 ease-in-out transform active:scale-95"
-            >
-              Next
-            </button>
-          )}
+          <div>
+            <ThemeToggle />
+          </div>
         </div>
-      </form>
-    </div>
+        <div className="  p-6 bg-base-100 rounded-lg shadow-xl border-2">
+          {/* Progress indicator */}
+          <div className="flex justify-between mb-6">
+            {steps.map((_, index) => (
+              <div
+                key={index}
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  step > index
+                    ? "bg-[#222] text-white font-semibold"
+                    : "bg-gray-200 text-gray-600 font-semibold"
+                }`}
+              >
+                {index + 1}
+              </div>
+            ))}
+          </div>
+
+          {/* Form content */}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <h2 className="text-xl font-bold mb-4">{steps[step - 1].title}</h2>
+            <motion.div
+              key={step} // Key ensures animation triggers on step change
+              variants={stepVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              {steps[step - 1].content}
+            </motion.div>
+
+            {/* Navigation buttons */}
+            <div className="mt-6 w-full flex justify-between items-center">
+              <button
+                type="button"
+                onClick={prevStep}
+                disabled={step === 1}
+                className={`px-4 py-2 rounded-md ${
+                  step === 1
+                    ? "bg-gray-300 font-semibold cursor-not-allowed"
+                    : "bg-[#222] hover:bg-[#d8d7d7] hover:text-[#222] text-[#fff] hover:border-[#222] hover:transition-all font-semibold hover:duration-300 cursor-pointer"
+                }`}
+              >
+                Previous
+              </button>
+
+              {step === 4 ? (
+                <button
+                  onClick={handleSubmitForm}
+                  type="submit"
+                  className="px-4 py-2 bg-[#222] hover:bg-[#d8d7d7] hover:text-[#222] text-[#fff] rounded-md hover:transition-all hover:border-[#222] font-semibold hover:duration-300 cursor-pointer"
+                >
+                  Submit
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={nextStep}
+                  className="px-4 py-2 bg-[#222] hover:bg-[#d8d7d7] hover:text-[#222] text-[#fff] rounded-md hover:transition-all hover:border-[#222] font-semibold hover:duration-300 cursor-pointer"
+                >
+                  Next
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 

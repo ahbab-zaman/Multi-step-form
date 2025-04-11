@@ -3,10 +3,10 @@ export default function Step3({ register, errors }) {
     <div className="space-y-4">
       {/* ... Previous Account Setup content unchanged ... */}
       <div>
-        <label className="block font-semibold text-gray-700">Username</label>
+        <label className="block font-semibold text-base-900">Username</label>
         <input
           {...register("username")}
-          className={`mt-1 block w-full py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+          className={`mt-1 block w-full py-2 rounded-md border-[1px] shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
             errors.username ? "border-red-500" : ""
           }`}
         />
@@ -15,11 +15,11 @@ export default function Step3({ register, errors }) {
         )}
       </div>
       <div>
-        <label className="block font-semibold text-gray-700">Password</label>
+        <label className="block font-semibold text-base-900">Password</label>
         <input
           type="password"
           {...register("password")}
-          className={`mt-1 block w-full font-semibold rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+          className={`mt-1 block py-2 w-full font-semibold rounded-md border-[1px] shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
             errors.password ? "border-red-500" : ""
           }`}
         />
@@ -28,13 +28,13 @@ export default function Step3({ register, errors }) {
         )}
       </div>
       <div>
-        <label className="block font-semibold text-gray-700">
+        <label className="block font-semibold text-base-900">
           Confirm Password
         </label>
         <input
           type="password"
           {...register("confirmPassword")}
-          className={`mt-1 block w-full py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+          className={`mt-1 block w-full py-2 rounded-md border-[1px] shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
             errors.confirmPassword ? "border-red-500" : ""
           }`}
         />
